@@ -11,51 +11,25 @@ datasource db {
 }
 
 model User {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  clerkId           String  @unique
-  email             String  @unique
-  username          String  @unique
-  photo             String
-  firstName         String?
-  lastName          String?
-  remainingDuration Int?    @default(3600)
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId   String  @unique
+  email     String  @unique
+  username  String  @unique
+  photo     String
+  firstName String?
+  lastName  String?
 
   @@map("users")
 }
 
 model Patient {
-  id                     String    @id @default(auto()) @map("_id") @db.ObjectId
-  fullName               String
-  userId                 String    @unique
-  medicalCondition       String?
-  age                    String
-  gender                 String
-  phoneNumber            String
-  email                  String? // Optional
-  address                String?
-  emergencyContacts      String?
-  maritalStatus          String?
-  smokingStatus          String?
-  insuranceCarrier       String?
-  alcoholConsumption     String?
-  physicalActivity       String?
-  dietaryHabits          String?
-  policyNumber           String?
-  groupID                String?
-  occupation             String?
-  height                 String?
-  supportSystem          String?
-  weight                 String?
-  educationLevel         String?
-  insuranceContactNumber String?
-  livingArrangement      String?
-  medicalHistories       String?
-  psychiatricHistories   String?
-  intakeAssessments      String?
-  additionalNotes        String?
-  History                History[]
-  createdAt              DateTime  @default(now())
-  updatedAt              DateTime  @updatedAt
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  fullName         String
+  userId           String    @unique
+  medicalCondition String?
+  History          History[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 }
 
 model History {
