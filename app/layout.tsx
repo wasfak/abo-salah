@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
+import Navbar from "@/components/NavLast";
+import { Poiret_One } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
+const poi = Poiret_One({ weight: "400", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +20,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <ClerkProvider>
+        <body className={poi.className}>
+          <Navbar />
+          <div className="mx-4 p-4"> {children}</div>
+        </body>
+      </ClerkProvider>
     </html>
   );
 }
