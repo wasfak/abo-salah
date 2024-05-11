@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ClerkProvider>
-        <body className={poi.className}>
+        <body className={inter.className}>
           <Navbar />
           <div className="mx-4 p-4"> {children}</div>
         </body>

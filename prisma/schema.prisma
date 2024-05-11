@@ -6,39 +6,43 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider  = "mongodb"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  clerkId   String  @unique
-  email     String  @unique
-  username  String  @unique
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId   String    @unique
+  email     String    @unique
+  username  String    @unique
   photo     String
+  products  Product[] @relation("UserProducts")
   firstName String?
   lastName  String?
 
   @@map("users")
 }
 
-model Patient {
-  id               String    @id @default(auto()) @map("_id") @db.ObjectId
-  fullName         String
-  userId           String    @unique
-  medicalCondition String?
-  History          History[]
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+model Product {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId String   @map("clerk_id")
+  title   String
+  price   Float
+  reviews Review[]
+  images  Image[]
+  user    User     @relation("UserProducts", fields: [clerkId], references: [clerkId])
+
+  @@map("products")
 }
 
-model History {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  patientId  String   @unique @db.ObjectId
-  diagnosis  String?
-  treatments String?
-  notes      String?
-  patient    Patient  @relation(fields: [patientId], references: [id])
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+type Review {
+  reviewerName String
+  reviewText   String
+  rating       Int
+}
+
+type Image {
+  url     String
+  caption String?
 }

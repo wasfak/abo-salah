@@ -27,9 +27,9 @@ export default function NavLast() {
           Home
         </Link>
         <Link
-          href="/dashboard/notes"
+          href="/dashboard"
           className={`transition-all duration-300 ease-in-out ${
-            path === "/dashboard/notes" ? "font-bold text-red-800" : ""
+            path === "/dashboard" ? "font-bold text-red-800" : ""
           }`}
         >
           Dashboard
