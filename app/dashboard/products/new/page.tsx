@@ -23,13 +23,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-interface AddEditProductDialogProps {
+interface AddProductProps {
   productToEdit?: Product;
 }
 
-export default function ProductAddPage({
-  productToEdit,
-}: AddEditProductDialogProps) {
+export default function ProductAddPage({ productToEdit }: AddProductProps) {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
 
   const form = useForm<CreateProductSchema>({
