@@ -24,8 +24,6 @@ import {
 } from "@/components/ui/form";
 
 interface AddEditProductDialogProps {
-  open: boolean;
-  setOpen: (open: boolean) => void;
   productToEdit?: Product;
 }
 
