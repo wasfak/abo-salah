@@ -10,7 +10,7 @@ import {
 } from "@/lib/validation/note";
 
 import { useState } from "react";
-import { Product } from "@prisma/client";
+
 import LoadingButton from "@/components/LoadingButton";
 
 import ImageUpload from "@/components/ui/image-upload";
@@ -23,23 +23,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-interface AddProductProps {
-  productToEdit?: Product;
-}
-
-export default function ProductAddPage({ productToEdit }: AddProductProps) {
+export default function ProductAddPage() {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
 
   const form = useForm<CreateProductSchema>({
     resolver: zodResolver(createProductSchema),
     defaultValues: {
-      title: productToEdit?.title || "",
-      price: productToEdit?.price || 0,
-      images:
-        productToEdit?.images.map((img) => ({
-          url: img.url,
-          caption: img.caption || undefined, // Convert null to undefined
-        })) || [],
+      title: "",
+      price: 0,
+      images: [],
     },
   });
 
@@ -47,22 +39,14 @@ export default function ProductAddPage({ productToEdit }: AddProductProps) {
     console.log(input);
 
     try {
-      if (productToEdit) {
-        const response = await fetch("/api/product", {
-          method: "PUT",
-          body: JSON.stringify({ id: productToEdit?.id, ...input }),
-        });
-        if (!response.ok) throw Error("status code " + response.status);
-      } else {
-        const response = await fetch("/api/product", {
-          method: "POST",
-          body: JSON.stringify(input),
-        });
+      const response = await fetch("/api/product", {
+        method: "POST",
+        body: JSON.stringify(input),
+      });
 
-        if (!response.ok) throw Error("status code " + response.status);
+      if (!response.ok) throw Error("status code " + response.status);
 
-        form.reset();
-      }
+      form.reset();
     } catch (error) {
       console.log(error);
     }
@@ -128,17 +112,6 @@ export default function ProductAddPage({ productToEdit }: AddProductProps) {
             )}
           />
 
-          {productToEdit && (
-            <LoadingButton
-              variant="destructive"
-              loading={deleteInProgress}
-              disabled={form.formState.isSubmitting}
-              /*       onClick={deleteNote} */
-              type="button"
-            >
-              Delete Patient
-            </LoadingButton>
-          )}
           <LoadingButton type="submit" loading={form.formState.isSubmitting}>
             Submit
           </LoadingButton>
