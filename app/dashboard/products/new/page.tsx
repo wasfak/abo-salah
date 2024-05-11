@@ -12,7 +12,7 @@ import {
 import { useState } from "react";
 import { Product } from "@prisma/client";
 import LoadingButton from "@/components/LoadingButton";
-import UploadBtn from "@/components/UploadBtn";
+
 import ImageUpload from "@/components/ui/image-upload";
 import {
   Form,
@@ -27,7 +27,7 @@ interface AddEditProductDialogProps {
   productToEdit?: Product;
 }
 
-export default function AddEditProduct({
+export default function ProductAddPage({
   productToEdit,
 }: AddEditProductDialogProps) {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
