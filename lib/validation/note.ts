@@ -5,7 +5,7 @@ export const createProductSchema = z.object({
   price: z.coerce
     .number()
     .min(0, { message: "Price must be a non-negative number" }),
-  reviews: z
+  /*   reviews: z
     .array(
       z.object({
         reviewerName: z
@@ -18,7 +18,7 @@ export const createProductSchema = z.object({
           .max(5, { message: "Rating must be between 1 and 5" }),
       })
     )
-    .optional(),
+    .optional(), */
   images: z
     .array(
       z.object({

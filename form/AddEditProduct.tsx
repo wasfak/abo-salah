@@ -26,6 +26,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Product } from "@prisma/client";
 import LoadingButton from "@/components/LoadingButton";
+import UploadBtn from "@/components/UploadBtn";
+import ImageUpload from "@/components/ui/image-upload";
 
 interface AddEditProductDialogProps {
   open: boolean;
@@ -82,7 +84,7 @@ export default function AddEditProduct({
   }
 
   return (
-    <div>
+    <div className="relative z-10">
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="my-2 h-[100vh] overflow-y-scroll">
           <DialogHeader>
@@ -102,6 +104,32 @@ export default function AddEditProduct({
                     <FormLabel>Title</FormLabel>
                     <FormControl>
                       <Input placeholder="Title" {...formField} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="images"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Images</FormLabel>
+                    <FormControl>
+                      <ImageUpload
+                        value={field.value.map((image) => image.url)}
+                        disabled={loading}
+                        onChange={(url) =>
+                          field.onChange([...field.value, { url }])
+                        }
+                        onRemove={(url) =>
+                          field.onChange([
+                            ...field.value.filter(
+                              (current) => current.url !== url
+                            ),
+                          ])
+                        }
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
