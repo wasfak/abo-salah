@@ -1,7 +1,7 @@
 "use client";
 import { SquarePlus } from "lucide-react";
 import { Button } from "./ui/button";
-import AddEditProduct from "@/form/AddEditProduct";
+
 import { useState } from "react";
 
 export default function AddProduct() {
@@ -16,7 +16,6 @@ export default function AddProduct() {
         <SquarePlus />
         Add Product
       </Button>
-      <AddEditProduct open={showForm} setOpen={setShowForm} />
     </div>
   );
 }

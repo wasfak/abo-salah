@@ -36,8 +36,6 @@ export default function ProductAddPage() {
   });
 
   async function onSubmit(input: CreateProductSchema) {
-    console.log(input);
-
     try {
       const response = await fetch("/api/product", {
         method: "POST",
