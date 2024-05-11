@@ -31,10 +31,10 @@ export const createProductSchema = z.object({
 
 export type CreateProductSchema = z.infer<typeof createProductSchema>;
 
-export const updatePatientSchema = createProductSchema.extend({
+export const updateProductSchema = createProductSchema.extend({
   id: z.string().min(1),
 });
 
-export const deleteNoteSchema = z.object({
+export const deleteProductSchema = z.object({
   id: z.string().min(1),
 });
