@@ -31,11 +31,7 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
         body: JSON.stringify({ id: product?.id }),
       });
       if (!response.ok) throw Error("status code " + response.status);
-      toast.success("Item has been deleted successfully..", {
-        action: {
-          label: "Undo",
-        },
-      });
+      toast.success("Item has been deleted successfully..", {});
     } catch (error) {
       console.log(error);
     }

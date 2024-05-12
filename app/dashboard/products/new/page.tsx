@@ -44,11 +44,7 @@ export default function ProductAddPage() {
       });
 
       if (!response.ok) throw Error("status code " + response.status);
-      toast.success("Item has been created successfully..", {
-        action: {
-          label: "Undo",
-        },
-      });
+      toast.success("Item has been created successfully..", {});
       form.reset();
     } catch (error) {
       console.log(error);
