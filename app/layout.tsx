@@ -4,7 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import Navbar from "@/components/NavLast";
 import { Poiret_One } from "next/font/google";
-
+import { Toaster } from "@/components/ui/sonner";
 const inter = Inter({ subsets: ["latin"] });
 const poi = Poiret_One({ weight: "400", subsets: ["latin"] });
 
@@ -23,7 +23,10 @@ export default function RootLayout({
       <ClerkProvider>
         <body className={inter.className}>
           <Navbar />
-          <div className="mx-4 p-4"> {children}</div>
+          <div className="">
+            <Toaster />
+            {children}
+          </div>
         </body>
       </ClerkProvider>
     </html>

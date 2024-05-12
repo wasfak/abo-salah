@@ -1,5 +1,8 @@
 import prisma from "@/lib/db/prisma";
-import { createProductSchema } from "@/lib/validation/note";
+import {
+  createProductSchema,
+  deleteProductSchema,
+} from "@/lib/validation/note";
 
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
@@ -9,7 +12,7 @@ export const POST = async (req: Request) => {
   try {
     const body = await req.json();
 
-    const parseResult = createProductSchema.safeParse(body);
+    const parseResult = deleteProductSchema.safeParse(body);
 
     if (!parseResult.success) {
       return NextResponse.json({ error: "Invalid Input" }, { status: 400 });
@@ -133,11 +136,11 @@ export const POST = async (req: Request) => {
   }
 };
  */
-/* export const DELETE = async (req: Request) => {
+export const DELETE = async (req: Request) => {
   try {
     const body = await req.json();
 
-    const parseResult = deleteNoteSchema.safeParse(body);
+    const parseResult = deleteProductSchema.safeParse(body);
 
     if (!parseResult.success) {
       return NextResponse.json({ error: "Invalid Input" }, { status: 400 });
@@ -150,22 +153,17 @@ export const POST = async (req: Request) => {
     }
 
     const { id } = parseResult.data;
+    console.log(id);
 
-    const note = await prisma.note.findUnique({ where: { id } });
+    const note = await prisma.product.delete({ where: { id } });
 
     if (!note) {
       return NextResponse.json({ error: "no note to modify" }, { status: 500 });
     }
 
-    await prisma.$transaction(async (tx) => {
-      await tx.note.delete({ where: { id } });
-      await noteIndex.deleteOne(id);
-    });
-
     return NextResponse.json({ message: "Note Deleted" }, { status: 200 });
   } catch (error) {
-    console.log();
+    console.log(error);
     return NextResponse.json({ error: "Server Error" }, { status: 500 });
   }
 };
- */

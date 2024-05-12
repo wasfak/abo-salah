@@ -1,7 +1,8 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
+// @ts-ignore
+import { Toaster, toast } from "sonner";
 import { Input } from "@/components/ui/input";
 
 import {
@@ -43,7 +44,11 @@ export default function ProductAddPage() {
       });
 
       if (!response.ok) throw Error("status code " + response.status);
-
+      toast.success("Item has been created successfully..", {
+        action: {
+          label: "Undo",
+        },
+      });
       form.reset();
     } catch (error) {
       console.log(error);
@@ -51,10 +56,9 @@ export default function ProductAddPage() {
   }
 
   return (
-    <div className="relative z-10">
+    <div className="p-4 border-1 border-black rounded-md">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-          <h3 className="font-bold">Product Identification</h3>
           <FormField
             key="title"
             control={form.control}

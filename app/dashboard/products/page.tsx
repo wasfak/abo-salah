@@ -1,6 +1,7 @@
+import Itemdisplayer from "@/components/Itemdisplayer";
+
 import prisma from "@/lib/db/prisma";
 import { auth } from "@clerk/nextjs";
-import Image from "next/image";
 
 export default async function ProductsPage() {
   const { userId } = auth();
@@ -12,21 +13,14 @@ export default async function ProductsPage() {
       clerkId: userId,
     },
   });
-  console.log(products);
 
   return (
-    <div>
-      {products.map((product) => (
-        <div key={product.id}>
-          <h1>Name: {product.title}</h1>
-          <Image
-            src={product.images[0].url}
-            width={200}
-            height={200}
-            alt="Product"
-          />
-        </div>
-      ))}
+    <div className="">
+      <div className="flex gap-4 p-2">
+        {products.map((product) => (
+          <Itemdisplayer product={product} key={product.id} />
+        ))}
+      </div>
     </div>
   );
 }
