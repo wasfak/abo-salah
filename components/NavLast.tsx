@@ -6,9 +6,20 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Button } from "./ui/button";
+import { useEffect, useState } from "react";
 
 export default function NavLast() {
+  const [mounted, setMounted] = useState(false);
   const path = usePathname();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return "";
+  }
+
   return (
     <div className="flex items-center justify-between max-w-full bg-black text-white mx-auto px-4 py-2">
       <div className="flex items-center gap-2">

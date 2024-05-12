@@ -14,6 +14,7 @@ import { Product } from "@prisma/client";
 import Image from "next/image";
 import { useState } from "react";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 type ExcludedProduct = Omit<Product, "clerkId">;
 
@@ -23,6 +24,7 @@ interface ItemDisplayerProps {
 
 export default function Itemdisplayer({ product }: ItemDisplayerProps) {
   const [image, setImage] = useState(product?.images[0].url);
+  const router = useRouter();
 
   const handelDelete = async (id: string) => {
     try {
@@ -32,6 +34,7 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
       });
       if (!response.ok) throw Error("status code " + response.status);
       toast.success("Item has been deleted successfully..", {});
+      router.refresh();
     } catch (error) {
       console.log(error);
     }
@@ -40,13 +43,13 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
   return (
     <div>
       <Card className="w-[350px]">
-        <CardHeader className="w-full relative pt-[100%]">
+        <CardHeader className="w-full relative pt-[80%]">
           <Image
             src={image}
             alt={product.title}
-            objectFit="cover"
+            objectFit="contain"
             fill
-            className="w-full h-full top-0 left-0 object-cover border-b-2"
+            className="w-full h-full top-0 left-0 border-b-2"
             quality={90}
           />
         </CardHeader>
