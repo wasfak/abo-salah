@@ -12,7 +12,7 @@ export const POST = async (req: Request) => {
   try {
     const body = await req.json();
 
-    const parseResult = deleteProductSchema.safeParse(body);
+    const parseResult = createProductSchema.safeParse(body);
 
     if (!parseResult.success) {
       return NextResponse.json({ error: "Invalid Input" }, { status: 400 });
