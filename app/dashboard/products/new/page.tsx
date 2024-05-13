@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 
 import {
   CreateProductSchema,
-  createProductSchema,
+  createCategorySchema,
 } from "@/lib/validation/note";
 
 import { useState } from "react";
@@ -30,7 +30,7 @@ export default function ProductAddPage() {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
 
   const form = useForm<CreateProductSchema>({
-    resolver: zodResolver(createProductSchema),
+    resolver: zodResolver(createCategorySchema),
     defaultValues: {
       title: "",
       price: 0,

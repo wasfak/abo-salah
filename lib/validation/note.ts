@@ -41,3 +41,9 @@ export const updateProductSchema = createProductSchema.extend({
 export const deleteProductSchema = z.object({
   id: z.string().min(1),
 });
+
+export const createCategorySchema = z.object({
+  names: z.array(z.string().min(1, { message: "Category name is required" })),
+});
+
+export type CreateCategorySchema = z.infer<typeof createCategorySchema>;

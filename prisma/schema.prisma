@@ -11,31 +11,53 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  clerkId   String    @unique
-  email     String    @unique
-  username  String    @unique
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId   String     @unique
+  email     String     @unique
+  username  String     @unique
   photo     String
-  products  Product[] @relation("UserProducts")
+  products  Product[]  @relation("UserProducts")
   firstName String?
   lastName  String?
+  Category  Category[]
 
   @@map("users")
 }
 
 model Product {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
-  clerkId       String        @map("clerk_id")
+  id            String            @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId       String            @unique @map("clerk_id")
   title         String
   price         Float
   reviews       Review[]
   images        Image[]
-  isDiscount    Boolean       @default(false)
+  isDiscount    Boolean           @default(false)
   discountType  DiscountType?
+  categories    ProductCategory[] @relation("ProductToCategories")
   discountValue Float?
-  user          User          @relation("UserProducts", fields: [clerkId], references: [clerkId])
+  user          User              @relation("UserProducts", fields: [clerkId], references: [clerkId])
 
   @@map("products")
+}
+
+model Category {
+  id       String            @id @default(auto()) @map("_id") @db.ObjectId
+  name     String            @unique
+  products ProductCategory[] @relation("CategoryToProducts")
+  clerkId  String            @map("clerk_id")
+  user     User              @relation(fields: [clerkId], references: [clerkId])
+
+  @@index([clerkId])
+}
+
+model ProductCategory {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId  String   @map("productId") @db.ObjectId // Ensure this line is added
+  categoryId String   @map("categoryId") @db.ObjectId
+  product    Product  @relation("ProductToCategories", fields: [productId], references: [id])
+  category   Category @relation("CategoryToProducts", fields: [categoryId], references: [id])
+
+  @@map("product_categories")
 }
 
 enum DiscountType {

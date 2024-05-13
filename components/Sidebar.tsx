@@ -26,9 +26,14 @@ type MenuItemsProps = {
 export default function Sidebar({ show, setter }: SideBarProps) {
   const path = usePathname();
   const [showProductsDropdown, setShowProductsDropdown] = useState(false);
+  const [showCategoriesDropdown, setShowCategoriesDropdown] = useState(false);
 
   const toggleProductsDropdown = () => {
     setShowProductsDropdown(!showProductsDropdown);
+  };
+
+  const toggleCategoriesDropdown = () => {
+    setShowCategoriesDropdown(!showCategoriesDropdown);
   };
 
   // Define our base class
@@ -94,10 +99,31 @@ export default function Sidebar({ show, setter }: SideBarProps) {
               />
             </div>
           )}
+          <div className="flex items-center justify-between">
+            <MenuItem
+              name="Categories"
+              route="/dashboard/categories"
+              icon={<FaRedhat />}
+            />
+            <span
+              className="text-xl text-center my-2"
+              onClick={toggleCategoriesDropdown}
+            >
+              <Plus className="hover:cursor-pointer" />
+            </span>
+          </div>
+          {showCategoriesDropdown && (
+            <div className="flex flex-col pl-4">
+              <MenuItem
+                name="Add Category"
+                route="/dashboard/categories/new"
+                icon={<MdFiberNew />}
+              />
+            </div>
+          )}
 
-          <MenuItem name="Hats" route="/hats" icon={<FaRedhat />} />
-          <MenuItem name="About Us" route="/about" icon={<BsInfoSquare />} />
-          <MenuItem name="Contact" route="/contact" icon={<BsEnvelopeAt />} />
+          {/*     <MenuItem name="About Us" route="/about" icon={<BsInfoSquare />} />
+          <MenuItem name="Contact" route="/contact" icon={<BsEnvelopeAt />} /> */}
         </div>
       </div>
       {show ? <ModalOverlay /> : <></>}

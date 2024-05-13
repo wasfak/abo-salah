@@ -1,6 +1,6 @@
 import prisma from "@/lib/db/prisma";
 import {
-  createProductSchema,
+  createCategorySchema,
   deleteProductSchema,
 } from "@/lib/validation/note";
 
@@ -11,7 +11,7 @@ export const POST = async (req: Request) => {
   try {
     const body = await req.json();
 
-    const parseResult = createProductSchema.safeParse(body);
+    const parseResult = createCategorySchema.safeParse(body);
 
     if (!parseResult.success) {
       return NextResponse.json({ error: "Invalid Input" }, { status: 400 });
