@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 
 import {
   CreateProductSchema,
-  createCategorySchema,
+  createProductSchema,
 } from "@/lib/validation/note";
 
 import { useState } from "react";
@@ -30,7 +30,7 @@ export default function ProductAddPage() {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
 
   const form = useForm<CreateProductSchema>({
-    resolver: zodResolver(createCategorySchema),
+    resolver: zodResolver(createProductSchema),
     defaultValues: {
       title: "",
       price: 0,
@@ -44,7 +44,6 @@ export default function ProductAddPage() {
   async function onSubmit(input: CreateProductSchema) {
     try {
       const response = await createProduct(input);
-      console.log(response);
 
       toast.success("Item has been created successfully..", {});
       form.reset();
