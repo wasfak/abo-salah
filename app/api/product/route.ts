@@ -6,7 +6,6 @@ import {
 
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-export const runtime = "edge";
 
 export const POST = async (req: Request) => {
   try {
