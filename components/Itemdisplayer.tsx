@@ -58,7 +58,12 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
 
   return (
     <div>
-      <Card className="w-[350px]">
+      <Card className="w-[350px] relative">
+        {product.isDiscount && (
+          <span className="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-br-lg">
+            On Sale
+          </span>
+        )}
         <CardHeader className="w-full relative pt-[80%]">
           <Image
             src={image}
@@ -93,7 +98,7 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
               <div>
                 {product.isDiscount ? (
                   <div className="flex flex-col space-y-2 bg-gray-100 p-3 rounded-lg shadow-md">
-                    <span className="text-sm font-semibold text-gray-700">
+                    <span className="text-sm font-semibold text-red-600">
                       Original Price: ${originalPrice.toFixed(2)}
                     </span>
                     <span className="text-sm font-semibold text-green-600">
