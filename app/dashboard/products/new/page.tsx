@@ -23,9 +23,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useRouter } from "next/navigation";
 
 export default function ProductAddPage() {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
+  const router = useRouter();
 
   const form = useForm<CreateProductSchema>({
     resolver: zodResolver(createProductSchema),
@@ -46,6 +48,7 @@ export default function ProductAddPage() {
       if (!response.ok) throw Error("status code " + response.status);
       toast.success("Item has been created successfully..", {});
       form.reset();
+      router.push("/dashboard/products");
     } catch (error) {
       console.log(error);
     }
