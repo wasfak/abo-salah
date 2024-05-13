@@ -24,6 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
+import { createProduct } from "@/lib/productsAction/proAction";
 
 export default function ProductAddPage() {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
@@ -40,15 +41,11 @@ export default function ProductAddPage() {
 
   async function onSubmit(input: CreateProductSchema) {
     try {
-      const response = await fetch("/api/product", {
-        method: "POST",
-        body: JSON.stringify(input),
-      });
+      const response = await createProduct(input);
+      console.log(response);
 
-      if (!response.ok) throw Error("status code " + response.status);
       toast.success("Item has been created successfully..", {});
       form.reset();
-      router.push("/dashboard/products");
     } catch (error) {
       console.log(error);
     }

@@ -24,7 +24,6 @@ export const POST = async (req: Request) => {
     }
 
     const { title, price, images } = parseResult.data;
-    console.log(title, price, images);
 
     const product = await prisma.product.create({
       data: {
