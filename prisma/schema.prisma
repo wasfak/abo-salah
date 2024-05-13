@@ -24,15 +24,23 @@ model User {
 }
 
 model Product {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  clerkId String   @map("clerk_id")
-  title   String
-  price   Float
-  reviews Review[]
-  images  Image[]
-  user    User     @relation("UserProducts", fields: [clerkId], references: [clerkId])
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId       String        @map("clerk_id")
+  title         String
+  price         Float
+  reviews       Review[]
+  images        Image[]
+  isDiscount    Boolean       @default(false)
+  discountType  DiscountType?
+  discountValue Float?
+  user          User          @relation("UserProducts", fields: [clerkId], references: [clerkId])
 
   @@map("products")
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED
 }
 
 type Review {

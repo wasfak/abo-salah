@@ -15,6 +15,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 type ExcludedProduct = Omit<Product, "clerkId">;
 
@@ -24,9 +25,11 @@ interface ItemDisplayerProps {
 
 export default function Itemdisplayer({ product }: ItemDisplayerProps) {
   const [image, setImage] = useState(product?.images[0].url);
+  const [deleteInProgress, setDeleteInProgress] = useState(false);
   const router = useRouter();
 
   const handelDelete = async (id: string) => {
+    setDeleteInProgress(true);
     try {
       const response = await fetch("/api/product", {
         method: "DELETE",
@@ -37,8 +40,21 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
       router.refresh();
     } catch (error) {
       console.log(error);
+    } finally {
+      setDeleteInProgress(false);
     }
   };
+  const originalPrice = product.price;
+  let finalPrice = originalPrice;
+
+  if (product.isDiscount) {
+    if (product.discountType === "PERCENTAGE") {
+      finalPrice =
+        originalPrice - originalPrice * (product.discountValue! / 100);
+    } else if (product.discountType === "FIXED") {
+      finalPrice = originalPrice - product.discountValue!;
+    }
+  }
 
   return (
     <div>
@@ -74,8 +90,33 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="name">{product.title}</Label>
               </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="framework">${product.price}</Label>
+              <div>
+                {product.isDiscount ? (
+                  <div className="flex flex-col space-y-2 bg-gray-100 p-3 rounded-lg shadow-md">
+                    <span className="text-sm font-semibold text-gray-700">
+                      Original Price: ${originalPrice.toFixed(2)}
+                    </span>
+                    <span className="text-sm font-semibold text-green-600">
+                      Discounted Price: ${finalPrice.toFixed(2)}
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      You save: ${(originalPrice - finalPrice).toFixed(2)} (
+                      {product.discountType === "PERCENTAGE"
+                        ? `${product.discountValue}%`
+                        : `$${product.discountValue}`}
+                      )
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center bg-gray-100 p-3 rounded-lg shadow-md">
+                    <Label
+                      htmlFor="framework"
+                      className="text-sm font-semibold text-gray-800"
+                    >
+                      Price: ${product.price}
+                    </Label>
+                  </div>
+                )}
               </div>
             </div>
           </form>
@@ -85,7 +126,11 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
             variant="destructive"
             onClick={() => handelDelete(product.id)}
           >
-            Delete
+            {deleteInProgress ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              "Delete"
+            )}
           </Button>
         </CardFooter>
       </Card>

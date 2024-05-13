@@ -19,6 +19,9 @@ export const createProductSchema = z.object({
       })
     )
     .optional(), */
+  isDiscount: z.boolean(),
+  discountType: z.string().optional(),
+  discountValue: z.coerce.number().optional(),
   images: z
     .array(
       z.object({

@@ -1,27 +1,28 @@
 "use server";
-
+import { DiscountType } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 import prisma from "../db/prisma";
 
 import { auth } from "@clerk/nextjs";
-import { Product } from "@prisma/client";
+
 import { CreateProductSchema } from "../validation/note";
 
 export async function createProduct(product: CreateProductSchema) {
-  const { title, price, images } = product;
   try {
     const { userId } = auth();
 
     if (!userId) {
       return { status: 500, error: "not authed" };
     }
+    const discountType = product.discountType
+      ? DiscountType[product.discountType as keyof typeof DiscountType]
+      : null;
     const newProduct = await prisma.product.create({
       data: {
-        title,
-        price,
-        images,
+        ...product,
         clerkId: userId,
+        discountType,
       },
     });
     console.log(newProduct);

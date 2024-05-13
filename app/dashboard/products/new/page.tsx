@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 // @ts-ignore
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 
 import {
@@ -23,12 +23,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useRouter } from "next/navigation";
+
 import { createProduct } from "@/lib/productsAction/proAction";
 
 export default function ProductAddPage() {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
-  const router = useRouter();
 
   const form = useForm<CreateProductSchema>({
     resolver: zodResolver(createProductSchema),
@@ -36,6 +35,9 @@ export default function ProductAddPage() {
       title: "",
       price: 0,
       images: [],
+      isDiscount: false,
+      discountType: "PERCENTAGE",
+      discountValue: 0,
     },
   });
 
@@ -109,6 +111,64 @@ export default function ProductAddPage() {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="isDiscount"
+            render={({
+              field: { ref, onChange, onBlur, value, name, ...field },
+            }) => (
+              <FormItem>
+                <FormLabel>On sale?</FormLabel>
+                <FormControl>
+                  <input
+                    type="checkbox"
+                    name={name}
+                    ref={ref}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    checked={value} // Use checked for checkboxes
+                    {...field}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          {form.watch("isDiscount") && (
+            <>
+              <FormField
+                control={form.control}
+                name="discountType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Discount Type</FormLabel>
+                    <FormControl>
+                      <select {...field}>
+                        <option value="PERCENTAGE">Percentage</option>
+                        <option value="FIXED">Fixed Amount</option>
+                      </select>
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="discountValue"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Discount Value</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="Discount Value"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
 
           <LoadingButton type="submit" loading={form.formState.isSubmitting}>
             Submit
