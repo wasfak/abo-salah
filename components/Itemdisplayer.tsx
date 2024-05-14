@@ -13,6 +13,7 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import Loaderz from "../public/load.jpg";
 
 type ExcludedProduct = Omit<Product, "clerkId">;
 
@@ -70,6 +71,8 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
             quality={100}
             priority
             sizes="(max-width: 700px) 100vw, 700px"
+            loading="lazy"
+            placeholder="blur"
           />
         </CardHeader>
         <CardContent>
@@ -85,6 +88,7 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
                   height={50}
                   onClick={() => setImage(img.url)}
                   priority
+                  loading="lazy"
                 />
               ))}
             </div>
