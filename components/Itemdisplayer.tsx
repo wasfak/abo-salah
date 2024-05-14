@@ -1,13 +1,10 @@
 "use client";
-// @ts-ignore
 import { toast } from "sonner";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Label } from "./ui/label";
 import { Product } from "@prisma/client";
@@ -28,9 +25,7 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
   const router = useRouter();
 
-  const handelDelete = async (id: string) => {
-    console.log(id);
-
+  const handleDelete = async (id: string) => {
     setDeleteInProgress(true);
     try {
       const response = await fetch("/api/product", {
@@ -46,9 +41,9 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
       setDeleteInProgress(false);
     }
   };
+
   const originalPrice = product.price;
   let finalPrice = originalPrice;
-
   if (product.isDiscount) {
     if (product.discountType === "PERCENTAGE") {
       finalPrice =
@@ -66,74 +61,70 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
             On Sale
           </span>
         )}
-        <CardHeader className="w-full relative pt-[100%]">
+        <CardHeader className="relative pt-[100%]">
           <Image
             src={image}
             alt={product.title}
             fill
-            sizes="(min-width: 350px) 350px, 100vw"
-            className="w-full h-full top-0 left-0 border-b-2"
+            className="absolute top-0 left-0 object-cover"
             quality={100}
             priority
+            sizes="(max-width: 700px) 100vw, 700px"
           />
         </CardHeader>
         <CardContent>
-          <form>
-            <div className="grid w-full items-center gap-4">
-              {product.images.length > 1 && (
-                <div className="m-y-6 flex flex-wrap gap-4 justify-center">
-                  {product.images.map((img, index) => (
-                    <Image
-                      key={img.url}
-                      src={img.url}
-                      alt={`${product.title} - Additional image ${index + 1}`}
-                      className="rounded-full border-2 w-16 h-16 border-gray-200 hover:border-gray-700 hover:cursor-pointer"
-                      width={50}
-                      height={50}
-                      onClick={() => setImage(img.url)}
-                      priority
-                    />
-                  ))}
-                </div>
-              )}
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">{product.title}</Label>
-              </div>
-              <div>
-                {product.isDiscount ? (
-                  <div className="flex flex-col space-y-2 bg-gray-100 p-3 rounded-lg shadow-md">
-                    <span className="text-sm font-semibold text-red-600">
-                      Original Price: ${originalPrice.toFixed(2)}
-                    </span>
-                    <span className="text-sm font-semibold text-green-600">
-                      Discounted Price: ${finalPrice.toFixed(2)}
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      You save: ${(originalPrice - finalPrice).toFixed(2)} (
-                      {product.discountType === "PERCENTAGE"
-                        ? `${product.discountValue}%`
-                        : `$${product.discountValue}`}
-                      )
-                    </span>
-                  </div>
-                ) : (
-                  <div className="flex items-center bg-gray-100 p-3 rounded-lg shadow-md">
-                    <Label
-                      htmlFor="framework"
-                      className="text-sm font-semibold text-gray-800"
-                    >
-                      Price: ${product.price}
-                    </Label>
-                  </div>
-                )}
-              </div>
+          {product.images.length > 1 && (
+            <div className="my-6 flex flex-wrap gap-4 justify-center">
+              {product.images.map((img, index) => (
+                <Image
+                  key={img.url}
+                  src={img.url}
+                  alt={`${product.title} - Additional image ${index + 1}`}
+                  className="rounded-full border-2 w-16 h-16 border-gray-200 hover:border-gray-700 hover:cursor-pointer"
+                  width={50}
+                  height={50}
+                  onClick={() => setImage(img.url)}
+                  priority
+                />
+              ))}
             </div>
-          </form>
+          )}
+          <div className="flex flex-col space-y-1.5">
+            <Label htmlFor="name">{product.title}</Label>
+          </div>
+          <div>
+            {product.isDiscount ? (
+              <div className="flex flex-col space-y-2 bg-gray-100 p-3 rounded-lg shadow-md">
+                <span className="text-sm font-semibold text-red-600">
+                  Original Price: ${originalPrice.toFixed(2)}
+                </span>
+                <span className="text-sm font-semibold text-green-600">
+                  Discounted Price: ${finalPrice.toFixed(2)}
+                </span>
+                <span className="text-sm text-gray-500">
+                  You save: ${(originalPrice - finalPrice).toFixed(2)} (
+                  {product.discountType === "PERCENTAGE"
+                    ? `${product.discountValue}%`
+                    : `$${product.discountValue}`}
+                  )
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center bg-gray-100 p-3 rounded-lg shadow-md">
+                <Label
+                  htmlFor="framework"
+                  className="text-sm font-semibold text-gray-800"
+                >
+                  Price: ${product.price}
+                </Label>
+              </div>
+            )}
+          </div>
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button
             variant="destructive"
-            onClick={() => handelDelete(product.id)}
+            onClick={() => handleDelete(product.id)}
           >
             {deleteInProgress ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
