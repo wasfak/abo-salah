@@ -4,12 +4,13 @@ import Link from "next/link";
 import Humburg from "./Humburg";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
 
 export default function NavLast() {
   const [mounted, setMounted] = useState(false);
+  const { isSignedIn, user, isLoaded } = useUser();
   const path = usePathname();
 
   useEffect(() => {
@@ -37,32 +38,32 @@ export default function NavLast() {
         >
           Home
         </Link>
-        <SignedIn>
-          <Link
-            href="/dashboard"
-            className={`transition-all duration-300 ease-in-out ${
-              path === "/dashboard" ? "text-red-800" : ""
-            }`}
-          >
-            Dashboard
-          </Link>
-        </SignedIn>
+        <Link
+          href="/dashboard"
+          className={`transition-all duration-300 ease-in-out ${
+            path === "/dashboard" ? "text-red-800" : ""
+          }`}
+        >
+          Dashboard
+        </Link>
+
+        <div className="flex md:hidden">
+          <Humburg />
+        </div>
       </div>
-      <div className="hidden md:flex items-center gap-2">
-        <SignedIn>
+      {isSignedIn ? (
+        <div className="hidden md:flex items-center gap-2">
           <div className="flex items-center gap-2">
             <UserButton afterSignOutUrl="/" />
           </div>
-        </SignedIn>
-        <SignedOut>
+        </div>
+      ) : (
+        <div className="">
           <Button asChild>
             <Link href="/sign-in">Login</Link>
           </Button>
-        </SignedOut>
-      </div>
-      <div className="flex md:hidden">
-        <Humburg />
-      </div>
+        </div>
+      )}
     </div>
   );
 }
