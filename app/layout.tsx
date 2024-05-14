@@ -27,6 +27,7 @@ export default function RootLayout({
           <div className="">
             <Toaster />
             {children}
+            <SpeedInsights />
           </div>
         </body>
       </ClerkProvider>
