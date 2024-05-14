@@ -12,6 +12,10 @@ export default async function ProductsPage() {
     where: {
       clerkId: userId,
     },
+    cacheStrategy: {
+      ttl: 30,
+      swr: 60,
+    },
   });
 
   return (
