@@ -25,26 +25,28 @@ export default function NavLast() {
       <div className="flex items-center gap-2">
         <Link href="/" className="flex items-center gap-2">
           <Image src={logo} alt="logo" width={40} height={40} priority />
-          <span className=" hidden sm:block">Logo</span>
+          <span className="hidden sm:block">Logo</span>
         </Link>
       </div>
       <div className="flex w-full items-center justify-center gap-4 hidden md:flex">
         <Link
           href="/"
           className={`transition-all duration-300 ease-in-out ${
-            path === "/" ? " text-red-800" : ""
+            path === "/" ? "text-red-800" : ""
           }`}
         >
           Home
         </Link>
-        <Link
-          href="/dashboard"
-          className={`transition-all duration-300 ease-in-out ${
-            path === "/dashboard" ? " text-red-800" : ""
-          }`}
-        >
-          Dashboard
-        </Link>
+        <SignedIn>
+          <Link
+            href="/dashboard"
+            className={`transition-all duration-300 ease-in-out ${
+              path === "/dashboard" ? "text-red-800" : ""
+            }`}
+          >
+            Dashboard
+          </Link>
+        </SignedIn>
       </div>
       <div className="hidden md:flex items-center gap-2">
         <SignedIn>
