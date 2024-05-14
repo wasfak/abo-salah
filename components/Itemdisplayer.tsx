@@ -55,7 +55,7 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
   }
 
   return (
-    <div>
+    <div className="min-w-screen min-h-screen bg-indigo-500">
       <Card className="w-[350px] relative">
         {product.isDiscount && (
           <span className="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-br-lg">
@@ -71,8 +71,6 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
             quality={100}
             priority
             sizes="(max-width: 700px) 100vw, 700px"
-            loading="lazy"
-            placeholder="blur"
           />
         </CardHeader>
         <CardContent>
@@ -88,7 +86,6 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
                   height={50}
                   onClick={() => setImage(img.url)}
                   priority
-                  loading="lazy"
                 />
               ))}
             </div>
