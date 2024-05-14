@@ -29,6 +29,8 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
   const router = useRouter();
 
   const handelDelete = async (id: string) => {
+    console.log(id);
+
     setDeleteInProgress(true);
     try {
       const response = await fetch("/api/product", {
@@ -64,14 +66,15 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
             On Sale
           </span>
         )}
-        <CardHeader className="w-full relative pt-[80%]">
+        <CardHeader className="w-full relative pt-[100%]">
           <Image
             src={image}
             alt={product.title}
-            objectFit="contain"
             fill
+            sizes="(min-width: 350px) 350px, 100vw"
             className="w-full h-full top-0 left-0 border-b-2"
-            quality={90}
+            quality={100}
+            priority
           />
         </CardHeader>
         <CardContent>
@@ -88,6 +91,7 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
                       width={50}
                       height={50}
                       onClick={() => setImage(img.url)}
+                      priority
                     />
                   ))}
                 </div>
