@@ -3,6 +3,7 @@ import RedirectButton from "@/components/RedirectButton";
 import prisma from "@/lib/db/prisma";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 export default async function ProductsPage() {
   const { userId } = auth();
@@ -39,16 +40,18 @@ export default async function ProductsPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map((product) => (
-          <div
-            key={product.id}
-            className="flex flex-col items-center bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300"
-          >
-            <Itemdisplayer product={product} />
-          </div>
-        ))}
-      </div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {products.map((product) => (
+            <div
+              key={product.id}
+              className="flex flex-col items-center bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300"
+            >
+              <Itemdisplayer product={product} />
+            </div>
+          ))}
+        </div>
+      </Suspense>
     </div>
   );
 }
