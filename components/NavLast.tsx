@@ -22,7 +22,7 @@ export default function NavLast() {
   }
 
   return (
-    <div className="flex items-center justify-between max-w-full bg-black text-white mx-auto px-4 py-2">
+    <div className="flex items-center justify-between max-w-full bg-[#1a1a1a] text-white mx-auto px-4 py-2">
       <div className="flex items-center gap-2">
         <Link href="/" className="flex items-center gap-2">
           <Image src={logo} alt="logo" width={40} height={40} priority />

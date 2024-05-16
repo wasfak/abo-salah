@@ -5,10 +5,12 @@ import { AiFillProduct } from "react-icons/ai";
 import { MdFiberNew } from "react-icons/md";
 
 import { SlHome } from "react-icons/sl";
-import { BsInfoSquare, BsEnvelopeAt } from "react-icons/bs";
+import { AiFillSkin } from "react-icons/ai";
+import { AiFillTruck } from "react-icons/ai";
+import { AiFillHome } from "react-icons/ai";
+
 import { FaRedhat } from "react-icons/fa";
 import { usePathname } from "next/navigation";
-import { FcShop } from "react-icons/fc";
 
 import { Plus } from "lucide-react";
 
@@ -21,6 +23,7 @@ type MenuItemsProps = {
   name: string;
   route: string;
   icon: any;
+  className?: string;
 };
 
 export default function Sidebar({ show, setter }: SideBarProps) {
@@ -38,15 +41,15 @@ export default function Sidebar({ show, setter }: SideBarProps) {
 
   // Define our base class
   const className =
-    "bg-[#8cd9c4] text-black w-[250px] transition-[margin-left] ease-in-out duration-500 fixed md:static top-0 bottom-0 left-0 z-40";
-  // Append class based on state of sidebar visiblity
+    "bg-[#ebebeb] text-sm font-semibold text-black w-[250px] transition-[margin-left] ease-in-out duration-500 fixed md:static top-0 bottom-0 left-0 z-40 ";
+
   const appendClass = show ? " ml-0" : " ml-[-250px] md:ml-0";
 
   // Clickable menu items
-  const MenuItem = ({ icon, name, route }: MenuItemsProps) => {
+  const MenuItem = ({ icon, name, route, className }: MenuItemsProps) => {
     // Highlight menu item based on currently displayed route
     const colorClass =
-      path === route ? "text-white" : "text-black hover:text-white";
+      path === route ? "text-[#327bdb] " : "text-black hover:text-gray-600";
 
     return (
       <Link
@@ -54,10 +57,10 @@ export default function Sidebar({ show, setter }: SideBarProps) {
         onClick={() => {
           setter((oldVal) => !oldVal);
         }}
-        className={`flex gap-1  [&>*]:my-auto text-md pl-6 py-3 border-b-[1px] border-b-white/10 ${colorClass}`}
+        className={`flex gap-2 items-center [&>*]:my-auto text-md pl-6 py-3 border-b-[1px] border-b-white/10 ${colorClass}`}
       >
-        <div className="text-xl flex [&>*]:mx-auto w-[30px]">{icon}</div>
-        <div>{name}</div>
+        <div className="text-xl flex [&>*]:mx-auto w-[20px]">{icon}</div>
+        <p className={`${className}`}>{name}</p>
       </Link>
     );
   };
@@ -76,12 +79,11 @@ export default function Sidebar({ show, setter }: SideBarProps) {
     <>
       <div className={`${className} ${appendClass}`}>
         <div className="flex flex-col">
-          <MenuItem name="Home Page" route="/" icon={<SlHome />} />
           <div className="flex items-center justify-between">
             <MenuItem
               name="Products"
               route="/dashboard/products"
-              icon={<AiFillProduct />}
+              icon={<AiFillSkin />}
             />
             <span
               className="text-xl text-center my-2"
@@ -91,14 +93,17 @@ export default function Sidebar({ show, setter }: SideBarProps) {
             </span>
           </div>
           {showProductsDropdown && (
-            <div className="flex flex-col pl-4">
+            <div className="flex flex-col pl-4 text-sm">
               <MenuItem
                 name="Add Product"
                 route="/dashboard/products/new"
                 icon={<MdFiberNew />}
+                className="text-black"
               />
             </div>
           )}
+          <MenuItem name="Orders" route="/" icon={<AiFillTruck />} />
+
           <div className="flex items-center justify-between">
             <MenuItem
               name="Categories"
@@ -121,9 +126,7 @@ export default function Sidebar({ show, setter }: SideBarProps) {
               />
             </div>
           )}
-
-          {/*     <MenuItem name="About Us" route="/about" icon={<BsInfoSquare />} />
-          <MenuItem name="Contact" route="/contact" icon={<BsEnvelopeAt />} /> */}
+          <MenuItem name="Home" route="/" icon={<AiFillHome />} />
         </div>
       </div>
       {show ? <ModalOverlay /> : <></>}

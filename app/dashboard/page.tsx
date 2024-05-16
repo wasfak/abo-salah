@@ -7,7 +7,7 @@ export default function DashboardPage() {
     redirect("/");
   }
   return (
-    <div>
+    <div className="bg-[#f1f1f1] text-sm font-semibold min-h-screen min-w-screen p-2">
       <h1>DashBoard Page</h1>
     </div>
   );

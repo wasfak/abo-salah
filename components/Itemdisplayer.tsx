@@ -55,7 +55,7 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
   }
 
   return (
-    <div className="min-w-screen min-h-screen bg-indigo-500">
+    <div className="min-w-screen min-h-screen">
       <Card className="w-[350px] relative">
         {product.isDiscount && (
           <span className="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-br-lg">

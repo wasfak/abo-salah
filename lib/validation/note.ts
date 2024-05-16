@@ -5,23 +5,12 @@ export const createProductSchema = z.object({
   price: z.coerce
     .number()
     .min(0, { message: "Price must be a non-negative number" }),
-  /*   reviews: z
-    .array(
-      z.object({
-        reviewerName: z
-          .string()
-          .min(1, { message: "Reviewer name is required" }),
-        reviewText: z.string().min(1, { message: "Review text is required" }),
-        rating: z
-          .number()
-          .min(1)
-          .max(5, { message: "Rating must be between 1 and 5" }),
-      })
-    )
-    .optional(), */
+  coastPerItem: z.coerce.number().optional(),
   isDiscount: z.boolean(),
-  discountType: z.string().optional(),
+  discountType: z.enum(["PERCENTAGE", "FIXED"]).optional(),
   discountValue: z.coerce.number().optional(),
+  description: z.string().min(1, { message: "Description is required" }),
+  status: z.enum(["ACTIVE", "OUTOFSTOCK", "ARCHIVED"]),
   images: z
     .array(
       z.object({

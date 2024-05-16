@@ -1,7 +1,9 @@
 "use client";
 import MenuBarMobile from "@/components/MenuBarMobile";
+import { Inter } from "next/font/google";
 import Sidebar from "@/components/Sidebar";
 import React, { useState } from "react";
+const inter = Inter({ subsets: ["latin"] });
 
 export default function Layout({
   children,
@@ -13,7 +15,7 @@ export default function Layout({
 
   return (
     <>
-      <div className="min-h-screen">
+      <div className={`min-h-screen ${inter.className}`}>
         <div className="flex">
           <MenuBarMobile setter={setShowSidebar} />
           <Sidebar show={showSidebar} setter={setShowSidebar} />

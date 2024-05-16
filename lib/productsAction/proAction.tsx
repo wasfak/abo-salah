@@ -13,7 +13,7 @@ export async function createProduct(product: CreateProductSchema) {
     const { userId } = auth();
 
     if (!userId) {
-      return { status: 500, error: "not authed" };
+      return { status: 500, error: "not Authenticated" };
     }
     const discountType = product.discountType
       ? DiscountType[product.discountType as keyof typeof DiscountType]

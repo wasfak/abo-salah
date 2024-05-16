@@ -30,11 +30,14 @@ model Product {
   clerkId       String            @unique @map("clerk_id")
   title         String
   price         Float
+  description   String
   reviews       Review[]
   images        Image[]
   isDiscount    Boolean           @default(false)
   discountType  DiscountType?
+  coastPerItem  Float
   categories    ProductCategory[] @relation("ProductToCategories")
+  status        ProductStatus     @default(ACTIVE)
   discountValue Float?
   user          User              @relation("UserProducts", fields: [clerkId], references: [clerkId])
 
@@ -64,6 +67,12 @@ model ProductCategory {
 enum DiscountType {
   PERCENTAGE
   FIXED
+}
+
+enum ProductStatus {
+  ACTIVE
+  OUTOFSTOCK
+  ARCHIVED
 }
 
 type Review {
