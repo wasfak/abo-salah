@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 
@@ -25,12 +25,10 @@ import {
 import { createProduct } from "@/lib/productsAction/proAction";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuLabel,
   DropdownMenuRadioGroup,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
@@ -40,11 +38,6 @@ const statusOptions = [
   { value: "ACTIVE", label: "Active" },
   { value: "OUTOFSTOCK", label: "Out of Stock" },
   { value: "ARCHIVED", label: "Archived" },
-];
-
-const discountTypeOptions = [
-  { value: "PERCENTAGE", label: "Percentage" },
-  { value: "FIXED", label: "Fixed Amount" },
 ];
 
 export default function ProductAddPage() {
@@ -66,17 +59,16 @@ export default function ProductAddPage() {
   });
 
   async function onSubmit(input: CreateProductSchema) {
-    console.log(input);
-    /* 
     try {
       const response = await createProduct(input);
-
-      toast.success("Item has been created successfully.", {});
-      form.reset();
+      if (response) {
+        toast.success("Item has been created successfully.", {});
+        form.reset();
+      }
     } catch (error) {
       console.log(error);
       toast.error("Failed to create the product. Please try again.");
-    } */
+    }
   }
 
   return (
@@ -160,33 +152,34 @@ export default function ProductAddPage() {
               </div>
             </div>
           </div>
-
-          <FormField
-            control={form.control}
-            name="images"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Images</FormLabel>
-                <FormControl>
-                  <ImageUpload
-                    value={field.value?.map((image) => image.url) || []}
-                    disabled={deleteInProgress}
-                    onChange={(url: string) =>
-                      field.onChange([...(field.value || []), { url }])
-                    }
-                    onRemove={(url: string) =>
-                      field.onChange([
-                        ...(field.value || []).filter(
-                          (current) => current.url !== url
-                        ),
-                      ])
-                    }
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="w-3/4 flex flex-col gap-4 p-4 rounded-2xl bg-[#ffffff] m-4 border-gray-600">
+            <FormField
+              control={form.control}
+              name="images"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Images</FormLabel>
+                  <FormControl>
+                    <ImageUpload
+                      value={field.value?.map((image) => image.url) || []}
+                      disabled={deleteInProgress}
+                      onChange={(url: string) =>
+                        field.onChange([...(field.value || []), { url }])
+                      }
+                      onRemove={(url: string) =>
+                        field.onChange([
+                          ...(field.value || []).filter(
+                            (current) => current.url !== url
+                          ),
+                        ])
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <div className="p-4 bg-white rounded-xl shadow-md border border-gray-200 mt-6">
             <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <FormField

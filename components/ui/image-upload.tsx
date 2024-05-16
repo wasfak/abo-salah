@@ -74,7 +74,7 @@ const ImageUpload = ({
               variant="secondary"
             >
               <ImagePlus className="h-4 w-4 mr-2" />
-              Upload an Image
+              Upload an Image(s)
             </Button>
           );
         }}

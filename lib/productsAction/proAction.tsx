@@ -25,7 +25,6 @@ export async function createProduct(product: CreateProductSchema) {
         discountType,
       },
     });
-    console.log(newProduct);
 
     revalidatePath("dashboard/products");
     return JSON.parse(JSON.stringify(newProduct));

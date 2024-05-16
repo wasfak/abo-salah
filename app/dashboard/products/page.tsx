@@ -1,8 +1,6 @@
 import Itemdisplayer from "@/components/Itemdisplayer";
 import RedirectButton from "@/components/RedirectButton";
-
 import prisma from "@/lib/db/prisma";
-
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
@@ -13,15 +11,22 @@ export default async function ProductsPage() {
     return <div>Not authorized</div>;
   }
 
-  const products = await prisma.product.findMany({
-    where: {
-      clerkId: userId as string,
-    },
-    cacheStrategy: {
-      ttl: 30,
-      swr: 60,
-    },
-  });
+  let products;
+  try {
+    products = await prisma.product.findMany({
+      where: {
+        clerkId: userId as string,
+      },
+      cacheStrategy: {
+        ttl: 30,
+        swr: 60,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+
+    redirect("/dashboard");
+  }
 
   if (!products || products.length === 0) {
     return (
