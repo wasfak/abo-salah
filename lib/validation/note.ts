@@ -5,7 +5,7 @@ export const createProductSchema = z.object({
   price: z.coerce
     .number()
     .min(0, { message: "Price must be a non-negative number" }),
-  coastPerItem: z.coerce.number().optional(),
+  coastPerItem: z.coerce.number(),
   isDiscount: z.boolean(),
   discountType: z.enum(["PERCENTAGE", "FIXED"]).optional(),
   discountValue: z.coerce.number().optional(),
