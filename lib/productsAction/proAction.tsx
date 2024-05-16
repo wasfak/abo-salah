@@ -26,7 +26,7 @@ export async function createProduct(product: CreateProductSchema) {
       },
     });
 
-    revalidatePath("dashboard/products");
+    revalidatePath("/dashboard/products");
     return JSON.parse(JSON.stringify(newProduct));
   } catch (error) {
     console.log(error);

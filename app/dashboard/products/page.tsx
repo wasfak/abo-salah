@@ -17,10 +17,10 @@ export default async function ProductsPage() {
       where: {
         clerkId: userId as string,
       },
-      cacheStrategy: {
+      /*    cacheStrategy: {
         ttl: 30,
         swr: 60,
-      },
+      }, */
     });
   } catch (error) {
     console.error("Error fetching products:", error);
