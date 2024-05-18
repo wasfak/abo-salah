@@ -71,6 +71,8 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
             quality={100}
             priority
             sizes="(max-width: 700px) 100vw, 700px"
+            blurDataURL="/load.jpg"
+            placeholder="blur"
           />
         </CardHeader>
         <CardContent>

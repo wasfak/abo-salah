@@ -1,9 +1,11 @@
-import Itemdisplayer from "@/components/Itemdisplayer";
-import RedirectButton from "@/components/RedirectButton";
+import dynamic from "next/dynamic";
 import prisma from "@/lib/db/prisma";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+
+const Itemdisplayer = dynamic(() => import("@/components/Itemdisplayer"));
+const RedirectButton = dynamic(() => import("@/components/RedirectButton"));
 
 export default async function ProductsPage() {
   const { userId } = auth();
@@ -25,8 +27,9 @@ export default async function ProductsPage() {
     });
   } catch (error) {
     console.error("Error fetching products:", error);
-
-    redirect("/dashboard");
+    if (error) {
+      redirect("/dashboard/products");
+    }
   }
 
   if (!products || products.length === 0) {
