@@ -40,6 +40,8 @@ model Product {
   status        ProductStatus     @default(ACTIVE)
   discountValue Float?
   user          User              @relation("UserProducts", fields: [clerkId], references: [clerkId])
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
 
   @@map("products")
 }

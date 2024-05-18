@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { AiFillProduct } from "react-icons/ai";
+
 import { MdFiberNew } from "react-icons/md";
 
-import { SlHome } from "react-icons/sl";
+import { AiFillSignal } from "react-icons/ai";
 import { AiFillSkin } from "react-icons/ai";
 import { AiFillTruck } from "react-icons/ai";
 import { AiFillHome } from "react-icons/ai";
@@ -102,7 +102,11 @@ export default function Sidebar({ show, setter }: SideBarProps) {
               />
             </div>
           )}
-          <MenuItem name="Orders" route="/" icon={<AiFillTruck />} />
+          <MenuItem
+            name="Orders"
+            route="/dashboard/orders"
+            icon={<AiFillTruck />}
+          />
 
           <div className="flex items-center justify-between">
             <MenuItem
@@ -126,7 +130,14 @@ export default function Sidebar({ show, setter }: SideBarProps) {
               />
             </div>
           )}
+          <MenuItem
+            name="Analytics"
+            route="/dashboard/analytics"
+            icon={<AiFillSignal />}
+          />
+
           <MenuItem name="Home" route="/" icon={<AiFillHome />} />
+          <MenuItem name="Productsver" route="/dashboard/productsver" icon={<AiFillHome />} />
         </div>
       </div>
       {show ? <ModalOverlay /> : <></>}

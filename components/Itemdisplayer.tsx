@@ -14,6 +14,7 @@ import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import Loaderz from "../public/load.jpg";
+import { deleteItem } from "@/lib/productsAction/proAction";
 
 type ExcludedProduct = Omit<Product, "clerkId">;
 
@@ -29,11 +30,9 @@ export default function Itemdisplayer({ product }: ItemDisplayerProps) {
   const handleDelete = async (id: string) => {
     setDeleteInProgress(true);
     try {
-      const response = await fetch("/api/product", {
-        method: "DELETE",
-        body: JSON.stringify({ id: product?.id }),
-      });
-      if (!response.ok) throw Error("status code " + response.status);
+      const response = await deleteItem(id);
+      if (response?.status === 500)
+        throw Error("status code " + response.error);
       toast.success("Item has been deleted successfully..", {});
       router.refresh();
     } catch (error) {

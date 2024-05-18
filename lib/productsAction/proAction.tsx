@@ -61,3 +61,39 @@ export async function createCategory(categories: CreateCategorySchema) {
     return { status: 500, error: error };
   }
 }
+
+export async function deleteItem(itemId: string) {
+  try {
+    const { userId } = auth();
+
+    if (!userId) {
+      return { status: 500, error: "not Authenticated" };
+    }
+    const deletedItem = await prisma.product.delete({
+      where: { id: itemId },
+    });
+    if (!deletedItem) {
+      return { status: 500, error: "Item not found" };
+    }
+    revalidatePath("/dashboard/products");
+    return { status: 200, error: "Item deleted" };
+  } catch (error) {}
+}
+
+export async function getProducts() {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      return { status: 500, error: "not Authenticated" };
+    }
+
+    const products = await prisma.product.findMany({
+      where: {
+        clerkId: userId,
+      },
+    });
+    return { status: 200, items: products };
+  } catch {
+    return { status: 401, error: "Error" };
+  }
+}
