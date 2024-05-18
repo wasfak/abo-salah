@@ -8,10 +8,12 @@ import { useEffect, useState } from "react";
 export default function DemoPage() {
   const [mounted, setMounted] = useState(false);
   const [data, setData] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setMounted(true);
     const fetchData = async () => {
+      setIsLoading(true);
       const res = await getProducts();
       if (!res || res.status !== 200) {
         console.error("Error fetching products");
@@ -19,12 +21,17 @@ export default function DemoPage() {
       }
       if (res.items) {
         setData(res.items);
-        console.log(res.items);
+
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, []);
+
+  if (isLoading) {
+    return <h1>Loading...</h1>;
+  }
 
   if (!mounted) {
     return null;
