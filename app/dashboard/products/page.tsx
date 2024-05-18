@@ -4,8 +4,12 @@ import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-const Itemdisplayer = dynamic(() => import("@/components/Itemdisplayer"));
-const RedirectButton = dynamic(() => import("@/components/RedirectButton"));
+const Itemdisplayer = dynamic(() => import("@/components/Itemdisplayer"), {
+  suspense: true,
+});
+const RedirectButton = dynamic(() => import("@/components/RedirectButton"), {
+  suspense: true,
+});
 
 export default async function ProductsPage() {
   const { userId } = auth();
