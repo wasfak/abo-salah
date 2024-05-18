@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Checkbox from "./Checkbox";
 import CellAction from "./cell-action";
 
@@ -22,6 +23,22 @@ export const columns = [
     ),
   },
   {
+    accessorKey: "image",
+    header: "Image",
+    cell: ({ row }) => {
+      const firstImage = row.original.images?.[0]?.url;
+
+      return firstImage ? (
+        <Image
+          width={40}
+          height={40}
+          src={firstImage}
+          alt={row.original.title}
+        />
+      ) : null;
+    },
+  },
+  {
     accessorKey: "title",
     header: "Name",
   },
@@ -34,8 +51,25 @@ export const columns = [
     header: "Status",
   },
   {
-    accessorKey: "category",
+    accessorKey: "stock",
+    header: "Stock",
+  },
+  {
+    accessorKey: "categories",
     header: "Category",
+    cell: ({ row }) => {
+      const categories = row.original.categories?.map((c) => c.category) || [];
+
+      return (
+        <div>
+          {categories.map((category) => (
+            <span key={category.id} className="badge">
+              {category.name}
+            </span>
+          ))}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "createdAt",

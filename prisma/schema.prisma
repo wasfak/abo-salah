@@ -35,6 +35,8 @@ model Product {
   images        Image[]
   isDiscount    Boolean           @default(false)
   discountType  DiscountType?
+  stock         Int
+  unitSold      Int?              @default(0)
   coastPerItem  Float
   categories    ProductCategory[] @relation("ProductToCategories")
   status        ProductStatus     @default(ACTIVE)

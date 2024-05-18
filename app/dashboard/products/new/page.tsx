@@ -9,7 +9,7 @@ import {
   createProductSchema,
 } from "@/lib/validation/note";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import LoadingButton from "@/components/LoadingButton";
 import ImageUpload from "@/components/ui/image-upload";
@@ -22,17 +22,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { createProduct } from "@/lib/productsAction/proAction";
+import { createProduct, getCategories } from "@/lib/productsAction/proAction";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuRadioGroup,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { Category } from "@prisma/client";
 
 const statusOptions = [
   { value: "ACTIVE", label: "Active" },
@@ -43,6 +44,7 @@ const statusOptions = [
 export default function ProductAddPage() {
   const [position, setPosition] = useState("bottom");
   const [deleteInProgress, setDeleteInProgress] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
   const form = useForm<CreateProductSchema>({
     resolver: zodResolver(createProductSchema),
     defaultValues: {
@@ -51,12 +53,30 @@ export default function ProductAddPage() {
       description: "",
       price: 0,
       images: [],
+      stock: 0,
       isDiscount: false,
       status: "ACTIVE",
       discountType: "PERCENTAGE",
       discountValue: 0,
+      categories: [], // Add this line for default value
     },
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getCategories();
+      if (!res || res.status !== 200) {
+        console.error("Error fetching categories");
+        return;
+      }
+      if (res.categories) {
+        setCategories(res?.categories);
+        console.log(res.categories);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   async function onSubmit(input: CreateProductSchema) {
     try {
@@ -144,6 +164,45 @@ export default function ProductAddPage() {
                             </DropdownMenuRadioGroup>
                           </DropdownMenuContent>
                         </DropdownMenu>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <h3>Category</h3>
+                <FormField
+                  control={form.control}
+                  name="categories"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Category</FormLabel>
+                      <FormControl>
+                        <div className="space-y-2">
+                          {categories.map((category) => (
+                            <div
+                              key={category?.id}
+                              className="flex items-center"
+                            >
+                              <input
+                                type="checkbox"
+                                value={category.id}
+                                checked={field.value.includes(category.id)}
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  if (field.value.includes(value)) {
+                                    field.onChange(
+                                      field.value.filter((id) => id !== value)
+                                    );
+                                  } else {
+                                    field.onChange([...field.value, value]);
+                                  }
+                                }}
+                                className="mr-2"
+                              />
+                              <label>{category.name}</label>
+                            </div>
+                          ))}
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -270,7 +329,22 @@ export default function ProductAddPage() {
               </FormItem>
             )}
           />
-
+          <div className="w-3/4 flex flex-col gap-4 p-4 rounded-2xl bg-[#ffffff] m-4 border-gray-600">
+            <FormField
+              key="stock"
+              control={form.control}
+              name="stock"
+              render={({ field: formField }) => (
+                <FormItem>
+                  <FormLabel>Stock</FormLabel>
+                  <FormControl>
+                    <Input placeholder="55" {...formField} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           {form.watch("isDiscount") && (
             <>
               <FormField

@@ -5,6 +5,9 @@ export const createProductSchema = z.object({
   price: z.coerce
     .number()
     .min(0, { message: "Price must be a non-negative number" }),
+  stock: z.coerce
+    .number()
+    .min(0, { message: "Stock must be a non-negative number" }),
   coastPerItem: z.coerce.number(),
   isDiscount: z.boolean(),
   discountType: z.enum(["PERCENTAGE", "FIXED"]).optional(),
@@ -19,6 +22,7 @@ export const createProductSchema = z.object({
       })
     )
     .optional(),
+  categories: z.array(z.string()), // Ensure this line is included
 });
 
 export type CreateProductSchema = z.infer<typeof createProductSchema>;

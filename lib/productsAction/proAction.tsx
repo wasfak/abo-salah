@@ -23,6 +23,13 @@ export async function createProduct(product: CreateProductSchema) {
         ...product,
         clerkId: userId,
         discountType,
+        categories: {
+          create: product.categories.map((categoryId) => ({
+            category: {
+              connect: { id: categoryId },
+            },
+          })),
+        },
       },
     });
 
@@ -91,8 +98,35 @@ export async function getProducts() {
       where: {
         clerkId: userId,
       },
+      include: {
+        categories: {
+          include: {
+            category: true,
+          },
+        },
+      },
     });
     return { status: 200, items: products };
+  } catch {
+    return { status: 401, error: "Error" };
+  }
+}
+
+export async function getCategories() {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      return { status: 500, error: "not Authenticated" };
+    }
+
+    const categories = await prisma.category.findMany({
+      where: {
+        clerkId: userId,
+      },
+    });
+    console.log(categories);
+
+    return { status: 200, categories: categories };
   } catch {
     return { status: 401, error: "Error" };
   }
