@@ -64,7 +64,6 @@ export function DataTable({ columns, data, searchKey }) {
       handleSelectAll,
     },
   });
-  console.log(selectedIds);
 
   return (
     <div>

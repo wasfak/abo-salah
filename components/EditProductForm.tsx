@@ -3,14 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
-
-import {
-  CreateProductSchema,
-  createProductSchema,
-} from "@/lib/validation/note";
-
-import { useEffect, useState } from "react";
-
 import LoadingButton from "@/components/LoadingButton";
 import ImageUpload from "@/components/ui/image-upload";
 import {
@@ -21,8 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
-import { createProduct, getCategories } from "@/lib/productsAction/proAction";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -33,7 +23,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Category } from "@prisma/client";
+import {
+  CreateProductSchema,
+  UpdateProductSchema,
+  createProductSchema,
+  updateProductSchema,
+} from "@/lib/validation/note";
+import { Product, Category } from "@prisma/client";
+import { updateProduct } from "@/lib/productsAction/proAction";
 
 const statusOptions = [
   { value: "ACTIVE", label: "Active" },
@@ -41,58 +38,45 @@ const statusOptions = [
   { value: "ARCHIVED", label: "Archived" },
 ];
 
-export default function ProductAddPage() {
-  const [position, setPosition] = useState("bottom");
-  const [deleteInProgress, setDeleteInProgress] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const form = useForm<CreateProductSchema>({
-    resolver: zodResolver(createProductSchema),
+type EditProductFormProps = {
+  product: Product & { categories: { category: Category }[] };
+};
+
+export default function EditProductForm({ product }: EditProductFormProps) {
+  /*  console.log(product); */
+
+  const categories = product.categories.map((pc) => pc.category);
+  const images = product.images.map((image) => ({
+    url: image.url,
+    caption: image.caption || undefined,
+  }));
+  const discountType = product.discountType || "FIXED";
+
+  const form = useForm<UpdateProductSchema>({
+    resolver: zodResolver(updateProductSchema),
     defaultValues: {
-      title: "",
-      coastPerItem: 0,
-      description: "",
-      price: 0,
-      images: [],
-      stock: 0,
-      isDiscount: false,
-      status: "ACTIVE",
-      discountType: "PERCENTAGE",
-      discountValue: 0,
-      categories: [], // Add this line for default value
+      ...product,
+      id: product.id,
+      images,
+      discountType,
+      discountValue: product.discountValue ?? undefined,
+      categories: categories.map((category) => category.id),
     },
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await getCategories();
-      if (!res || res.status !== 200) {
-        console.error("Error fetching categories");
-        return;
-      }
-      if (res.categories) {
-        setCategories(res?.categories);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   async function onSubmit(input: CreateProductSchema) {
-    try {
-      const response = await createProduct(input);
-      if (response) {
-        toast.success("Item has been created successfully.", {});
-        form.reset();
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Failed to create the product. Please try again.");
+    const result = await updateProduct(input);
+    if (result.status === 200) {
+      toast.success("Product updated successfully");
+      // Optionally redirect or update the UI
+    } else {
+      toast.error(result.error || "Something went wrong");
     }
   }
 
   return (
     <div className="p-4 border-1 border-black rounded-md bg-[#f1f1f1]">
-      <h1 className="font-bold text-2xl mb-4">Add Product</h1>
+      <h1 className="font-bold text-2xl mb-4">Edit Product</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
           <div className="flex flex-col justify-between md:flex-row ">
@@ -179,7 +163,7 @@ export default function ProductAddPage() {
                         <div className="space-y-2">
                           {categories.map((category) => (
                             <div
-                              key={category?.id}
+                              key={category.id}
                               className="flex items-center"
                             >
                               <input
@@ -220,7 +204,6 @@ export default function ProductAddPage() {
                   <FormControl>
                     <ImageUpload
                       value={field.value?.map((image) => image.url) || []}
-                      disabled={deleteInProgress}
                       onChange={(url: string) =>
                         field.onChange([...(field.value || []), { url }])
                       }

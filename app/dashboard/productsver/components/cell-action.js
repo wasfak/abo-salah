@@ -1,6 +1,6 @@
 "use client";
 
-/* import AlertModal from "@/components/modals/alert-modal"; */
+import AlertModal from "./alert-modal";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,10 +10,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-/* import axios from "axios"; */
+import { deleteItem } from "@/lib/productsAction/proAction";
+
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 /* import toast from "react-hot-toast"; */
 
 const CellAction = ({ data }) => {
@@ -27,10 +29,10 @@ const CellAction = ({ data }) => {
     /*  toast.success("Product Id copied to clipboard"); */
   };
 
-  /*   const onDelete = async () => {
+  const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/products/${data.id}`);
+      const res = await deleteItem(data.id);
       router.refresh();
 
       toast.success("Product Deleted");
@@ -41,15 +43,15 @@ const CellAction = ({ data }) => {
       setOpen(false);
     }
   };
- */
+
   return (
     <>
-      {/*     <AlertModal
+      <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={onDelete}
         loading={loading}
-      /> */}
+      />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button className="h-8 w-8 p-0" variant="ghost">
@@ -61,12 +63,10 @@ const CellAction = ({ data }) => {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem onClick={() => onCopy(data.id)}>
             <Copy className="mr-2 h-4 w-4" />
-            Copy Id
+            Copy Link
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() =>
-              router.push(`/${params.storeId}/products/${data.id}`)
-            }
+            onClick={() => router.push(`/dashboard/productsver/${data.id}`)}
           >
             <Edit className="mr-2 h-4 w-4" />
             Update

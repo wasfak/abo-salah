@@ -28,9 +28,11 @@ export const createProductSchema = z.object({
 export type CreateProductSchema = z.infer<typeof createProductSchema>;
 
 export const updateProductSchema = createProductSchema.extend({
-  id: z.string().min(1),
+  id: z.string().min(1, { message: "Product ID is required" }).optional(),
+  clerkId: z.string().min(1, { message: "Clerk ID is required" }).optional(),
 });
 
+export type UpdateProductSchema = z.infer<typeof updateProductSchema>;
 export const deleteProductSchema = z.object({
   id: z.string().min(1),
 });

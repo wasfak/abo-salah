@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray, FieldValues } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/LoadingButton";
-// @ts-ignore
+// -ignore
 import { toast } from "sonner";
 import {
   Form,
