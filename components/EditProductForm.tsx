@@ -31,6 +31,7 @@ import {
 } from "@/lib/validation/note";
 import { Product, Category } from "@prisma/client";
 import { updateProduct } from "@/lib/productsAction/proAction";
+import { useState } from "react";
 
 const statusOptions = [
   { value: "ACTIVE", label: "Active" },
@@ -43,7 +44,7 @@ type EditProductFormProps = {
 };
 
 export default function EditProductForm({ product }: EditProductFormProps) {
-  /*  console.log(product); */
+  const [deleteInProgress, setDeleteInProgress] = useState(false);
 
   const categories = product.categories.map((pc) => pc.category);
   const images = product.images.map((image) => ({
@@ -203,6 +204,7 @@ export default function EditProductForm({ product }: EditProductFormProps) {
                   <FormLabel>Images</FormLabel>
                   <FormControl>
                     <ImageUpload
+                      disabled={deleteInProgress}
                       value={field.value?.map((image) => image.url) || []}
                       onChange={(url: string) =>
                         field.onChange([...(field.value || []), { url }])
