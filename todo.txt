@@ -1,2 +1,6 @@
 fix the delete button for item
 add edit
+reroute to the true products
+fix Category display
+fix the top checkbox
+remove console log

@@ -51,7 +51,19 @@ export default function NavLast() {
           <Humburg />
         </div>
       </div>
-      {isSignedIn ? (
+      {isLoaded && user && (
+        <div className="hidden md:flex items-center gap-2">
+          <UserButton afterSignOutUrl="/" />
+        </div>
+      )}
+      {isLoaded && !user && (
+        <div className="hidden md:flex items-center gap-2">
+          <Button asChild>
+            <Link href="/sign-in">Login</Link>
+          </Button>
+        </div>
+      )}
+      {/*     {isSignedIn ? (
         <div className="hidden md:flex items-center gap-2">
           <div className="flex items-center gap-2">
             <UserButton afterSignOutUrl="/" />
@@ -63,7 +75,7 @@ export default function NavLast() {
             <Link href="/sign-in">Login</Link>
           </Button>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
