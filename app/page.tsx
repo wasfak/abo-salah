@@ -1,11 +1,10 @@
 "use client";
 import Image from "next/image";
 import img1 from "../public/background-1.jpg";
-import img2 from "../public/background-2.jpg"; // Add your second image
+import img2 from "../public/background-2.jpg";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { FaArrowLeft } from "react-icons/fa";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -31,9 +30,9 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen w-screen flex items-center justify-center bg-gray-900 overflow-y-scroll overflow-x-hidden relative ">
+    <div className="h-screen w-screen flex items-center justify-center bg-gray-900 overflow-y-scroll overflow-x-hidden relative">
       <div
-        className="relative w-full h-full flex transition-transform duration-1000 ease-in-out"
+        className="relative w-full h-full flex transition-transform duration-700 ease-in-out"
         style={{ transform: `translateX(-${currentSlide * 100}%)` }}
       >
         {slides.map((slide, index) => (
@@ -41,14 +40,15 @@ export default function Home() {
             <Image
               src={slide.img}
               alt="Background"
-              layout="fill"
-              objectFit="cover"
+              fill
+              style={{ objectFit: "cover" }}
               priority
+              sizes="100vw"
+              quality={75}
             />
-            <div className="absolute inset-0 bg-black bg-opacity-50"></div>{" "}
-            {/* Black backdrop */}
+            <div className="absolute inset-0 bg-black bg-opacity-50"></div>
             <div className="absolute top-40 left-20 p-4">
-              <h1 className="text-white text-7xl font-extrabold">
+              <h1 className="text-white text-5xl font-extrabold">
                 {slide.text}
               </h1>
               <p className="text-white mt-2">{slide.description}</p>
@@ -59,16 +59,16 @@ export default function Home() {
           </div>
         ))}
       </div>
-      <div className="absolute top-[85%] right-20 transform -translate-y-1/2 z-10 flex space-x-2">
+      <div className="absolute bottom-10 right-20 transform -translate-y-1/2 z-10 flex space-x-2">
         <Button
           onClick={handlePrev}
-          className="rounded-full bg-white text-black px-4 py-2 w-16 h-16  hover:bg-white hover:text-green-500"
+          className="rounded-full bg-white text-black px-4 py-2 w-16 h-16 hover:bg-white hover:text-green-500"
         >
           <FaArrowLeft />
         </Button>
         <Button
           onClick={handleNext}
-          className="rounded-full bg-white text-black px-4 py-2 w-16 h-16  hover:bg-white hover:text-green-500"
+          className="rounded-full bg-white text-black px-4 py-2 w-16 h-16 hover:bg-white hover:text-green-500"
         >
           <FaArrowRight />
         </Button>
