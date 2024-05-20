@@ -22,7 +22,13 @@ export default function NavLast() {
   }
 
   return (
-    <div className="flex items-center justify-between max-w-full bg-[#1a1a1a] text-white mx-auto px-4 py-2">
+    <div
+      className={`${
+        !path.includes("/dashboard")
+          ? "absolute top-0 left-0 w-full bg-transparent text-[#919294] px-6 py-2 z-50"
+          : "flex items-center justify-between max-w-full mx-auto px-6 py-2 bg-black text-white"
+      }`}
+    >
       <div className="flex items-center gap-2">
         <Link href="/" className="flex items-center gap-2">
           <Image src={logo} alt="logo" width={40} height={40} priority />
@@ -32,16 +38,16 @@ export default function NavLast() {
       <div className="flex w-full items-center justify-center gap-4 hidden md:flex">
         <Link
           href="/"
-          className={`transition-all duration-300 ease-in-out ${
-            path === "/" ? "text-red-800" : ""
+          className={`transition-all duration-300 ease-in-out hover:text-white ${
+            path === "/" ? "text-white" : ""
           }`}
         >
           Home
         </Link>
         <Link
           href="/dashboard"
-          className={`transition-all duration-300 ease-in-out ${
-            path === "/dashboard" ? "text-red-800" : ""
+          className={`transition-all duration-300 ease-in-out hover:text-white ${
+            path === "/dashboard" ? "text-white" : ""
           }`}
         >
           Dashboard

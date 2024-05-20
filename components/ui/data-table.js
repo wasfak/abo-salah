@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -7,6 +7,7 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   getFilteredRowModel,
+  getSortedRowModel,
   flexRender,
 } from "@tanstack/react-table";
 import {
@@ -21,61 +22,45 @@ import {
 export function DataTable({ columns, data, searchKey }) {
   const [columnFilters, setColumnFilters] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
-
-  const handleCheckboxChange = (id) => {
-    setSelectedIds((prevSelectedIds) =>
-      prevSelectedIds.includes(id)
-        ? prevSelectedIds.filter((selectedId) => selectedId !== id)
-        : [...prevSelectedIds, id]
-    );
-  };
-
-  const handleSelectAll = (isChecked) => {
-    if (isChecked) {
-      setSelectedIds(data.map((item) => item.id));
-    } else {
-      setSelectedIds([]);
-    }
-  };
-
-  const modifiedData = useMemo(() => {
-    return data.map((item) => ({
-      ...item,
-      isSelected: selectedIds.includes(item.id),
-      onCheckboxChange: () => handleCheckboxChange(item.id),
-    }));
-  }, [data, selectedIds]);
+  const [sorting, setSorting] = useState([]);
+  const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
-    data: modifiedData,
+    data,
     columns,
     state: {
       columnFilters,
-      rowSelection: selectedIds.reduce((acc, id) => {
-        acc[id] = true;
-        return acc;
-      }, {}),
+      rowSelection,
+      sorting,
     },
     onColumnFiltersChange: setColumnFilters,
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
+    onRowSelectionChange: setRowSelection,
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    meta: {
-      handleSelectAll,
-    },
+    getSortedRowModel: getSortedRowModel(),
   });
 
+  useEffect(() => {
+    const selectedItemIds = Object.keys(rowSelection)
+      .filter((id) => rowSelection[id])
+      .map((rowId) => data[rowId]?.id);
+    setSelectedIds(selectedItemIds);
+  }, [rowSelection, data]);
+  console.log(selectedIds);
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 gap-x-4">
         <Input
-          placeholder="Search..."
+          placeholder="Search by name..."
           value={table.getColumn(searchKey)?.getFilterValue() ?? ""}
           onChange={(event) =>
             table.getColumn(searchKey)?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="max-w-sm w-1/2"
         />
+        {selectedIds.length > 1 ? <Button>Delete</Button> : null}
       </div>
       <div className="rounded-md border">
         <Table>
@@ -124,6 +109,10 @@ export function DataTable({ columns, data, searchKey }) {
             )}
           </TableBody>
         </Table>
+        <div className="flex-1 text-sm text-muted-foreground p-2">
+          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button

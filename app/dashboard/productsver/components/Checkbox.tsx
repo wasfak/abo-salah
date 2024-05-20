@@ -1,18 +1,25 @@
 "use client";
 
+import { Input } from "@/components/ui/input";
+import { ChangeEvent, useEffect, useRef } from "react";
+
 type CheckProps = {
   checked: boolean;
-  onChange: () => void;
+  indeterminate?: boolean;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-const Checkbox = ({ checked, onChange }: CheckProps) => {
+const Checkbox = ({ checked, indeterminate, onChange }: CheckProps) => {
+  const ref = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.indeterminate = indeterminate || false;
+    }
+  }, [indeterminate]);
+
   return (
-    <input
-      type="checkbox"
-      className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out"
-      checked={checked}
-      onChange={onChange}
-    />
+    <Input type="checkbox" checked={checked} ref={ref} onChange={onChange} />
   );
 };
 

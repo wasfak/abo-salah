@@ -1,26 +1,33 @@
 "use client";
 import Image from "next/image";
-import Checkbox from "./Checkbox";
+
 import CellAction from "./cell-action";
+import { Button } from "@/components/ui/button";
+import { ArrowUpDown } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export const columns = [
   {
     id: "select",
     header: ({ table }) => (
       <Checkbox
-        onChange={(e) => {
-          const isChecked = e.target.checked;
-          table.options.meta?.handleSelectAll(isChecked);
-        }}
-        checked={table.getIsAllRowsSelected()}
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
       />
     ),
     cell: ({ row }) => (
       <Checkbox
-        checked={row.original.isSelected}
-        onChange={row.original.onCheckboxChange}
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
       />
     ),
+    enableSorting: false,
+    enableHiding: false,
   },
   {
     accessorKey: "image",
@@ -40,7 +47,17 @@ export const columns = [
   },
   {
     accessorKey: "title",
-    header: "Name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "price",
