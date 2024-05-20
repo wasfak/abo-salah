@@ -17,15 +17,21 @@ export default function NavLast() {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (isSignedIn && (path === "/sign-in" || path === "/sign-up")) {
+      window.location.href = "/";
+    }
+  }, [isSignedIn, path]);
+
   if (!mounted) {
-    return "";
+    return null; // Return null to avoid rendering anything before the component is mounted
   }
 
   return (
     <div
       className={`${
         !path.includes("/dashboard")
-          ? "absolute top-0 left-0 w-full bg-transparent text-[#919294] px-6 py-2 z-50"
+          ? "fixed top-0 left-0 w-full bg-transparent text-[#919294] px-6 py-2 z-50 flex items-center justify-between"
           : "flex items-center justify-between max-w-full mx-auto px-6 py-2 bg-black text-white"
       }`}
     >
@@ -35,7 +41,7 @@ export default function NavLast() {
           <span className="hidden sm:block">Logo</span>
         </Link>
       </div>
-      <div className="flex w-full items-center justify-center gap-4 hidden md:flex">
+      <div className="hidden md:flex items-center gap-4">
         <Link
           href="/"
           className={`transition-all duration-300 ease-in-out hover:text-white ${
@@ -52,36 +58,18 @@ export default function NavLast() {
         >
           Dashboard
         </Link>
-
-        <div className="flex md:hidden">
-          <Humburg />
-        </div>
       </div>
-      {isLoaded && user && (
-        <div className="hidden md:flex items-center gap-2">
-          <UserButton afterSignOutUrl="/" />
-        </div>
-      )}
-      {isLoaded && !user && (
-        <div className="hidden md:flex items-center gap-2">
+      <div className="flex items-center gap-2">
+        {isLoaded && isSignedIn && <UserButton afterSignOutUrl="/" />}
+        {isLoaded && !isSignedIn && (
           <Button asChild>
             <Link href="/sign-in">Login</Link>
           </Button>
-        </div>
-      )}
-      {/*     {isSignedIn ? (
-        <div className="hidden md:flex items-center gap-2">
-          <div className="flex items-center gap-2">
-            <UserButton afterSignOutUrl="/" />
-          </div>
-        </div>
-      ) : (
-        <div className="">
-          <Button asChild>
-            <Link href="/sign-in">Login</Link>
-          </Button>
-        </div>
-      )} */}
+        )}
+      </div>
+      <div className="md:hidden">
+        <Humburg />
+      </div>
     </div>
   );
 }
