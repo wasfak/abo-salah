@@ -40,11 +40,10 @@ export default function Hero() {
               src={slide.img}
               alt="Background"
               fill
-              objectFit="cover"
               priority
 
               /*    fill
-          style={{ objectFit: "cover" }}
+         
     
           sizes="100vw"
           quality={75} */
