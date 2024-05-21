@@ -21,6 +21,13 @@ const config = {
       fontFamily: {
         poe: ["Poetsen One", "sans-serif"],
       },
+      screens: {
+        mobile: { max: "640px" },
+        tablet: { max: "768px" },
+        laptop: { max: "1024px" },
+        desktop: { max: "1280px" },
+        "large-desktop": { max: "1536px" },
+      },
       colors: {
         orange: "hsl(26, 100%, 55%)",
         paleOrange: "hsl(25, 100%, 94%)",

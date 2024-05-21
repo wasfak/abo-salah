@@ -42,7 +42,7 @@ export default function Home() {
                 src={slide.img}
                 alt="Background"
                 fill
-                priority
+                priority={true}
                 style={{ objectFit: "cover" }}
                 /*    fill
          
@@ -51,11 +51,13 @@ export default function Home() {
           quality={75} */
               />
               <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-              <div className="absolute top-40 left-20 p-4">
-                <h1 className="text-white text-5xl font-extrabold">
+              <div className="absolute top-40 left-20 p-4 mobile:left-5">
+                <h1 className="text-white text-5xl font-extrabold tablet:text-4xl mobile:text-red-500">
                   {slide.text}
                 </h1>
-                <p className="text-white mt-2">{slide.description}</p>
+                <p className="text-white mt-2 tablet:text-base">
+                  {slide.description}
+                </p>
                 <Button className="mt-10 bg-white text-black rounded-none hover:bg-white hover:text-green-500">
                   Shop Now
                 </Button>
@@ -66,13 +68,13 @@ export default function Home() {
         <div className="absolute bottom-10 right-20 transform -translate-y-1/2 z-10 flex space-x-2">
           <Button
             onClick={handlePrev}
-            className="rounded-full bg-white text-black px-4 py-2 w-16 h-16 hover:bg-white hover:text-green-500"
+            className="rounded-full bg-white text-black px-4 py-2 w-16 h-16 tablet:w-10 tablet:h-10 hover:bg-white hover:text-green-500"
           >
             <FaArrowLeft />
           </Button>
           <Button
             onClick={handleNext}
-            className="rounded-full bg-white text-black px-4 py-2 w-16 h-16 hover:bg-white hover:text-green-500"
+            className="rounded-full bg-white text-black px-4 py-2 w-16 h-16 tablet:w-10 tablet:h-10 hover:bg-white hover:text-green-500"
           >
             <FaArrowRight />
           </Button>
